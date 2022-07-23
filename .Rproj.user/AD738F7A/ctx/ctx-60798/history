@@ -1,0 +1,512 @@
+browser = 'firefox',
+verbose = F,
+port = free_port()
+)
+remDr <- rs_driver_object$client
+remDr$open()
+rs_driver_object <- rsDriver(
+browser = 'firefox',
+verbose = F,
+port = free_port()
+)
+remDr <- rs_driver_object$client
+remDr$open()
+source("~/MBA USP/TCC/Código/Scraper.R", encoding = 'UTF-8', echo=TRUE)
+remDr <- rs_driver_object$client
+remDr$open()
+remDr <- rs_driver_object$client
+rs_driver_object <- rsDriver(
+browser = 'firefox',
+verbose = F,
+port = free_port()
+)
+remDr <- rs_driver_object$client
+rs_driver_object <- rsDriver(
+browser = 'firefox',
+verbose = F,
+port = 4567
+)
+rs_driver_object <- rsDriver(
+browser = 'firefox',
+verbose = F,
+port = 4567
+)
+rs_driver_object <- rsDriver(
+browser = 'firefox',
+verbose = F,
+port = 4444
+)
+rs_driver_object <- rsDriver(
+browser = 'firefox',
+verbose = F,
+port = 4444L
+)
+remDr <- rs_driver_object$client
+remDr$open()
+remDr$navigate('https://www2.cjf.jus.br/jurisprudencia/trf1/index.xhtml')
+source("~/MBA USP/TCC/Código/Scraper.R", encoding = 'UTF-8', echo=TRUE)
+source("~/MBA USP/TCC/Código/Scraper.R", encoding = 'UTF-8', echo=TRUE)
+source("~/MBA USP/TCC/Código/Scraper.R", encoding = 'UTF-8', echo=TRUE)
+remDr.getUrl()
+remDr.getCurrentUrl()
+remDr$getCurrentUrl()
+content <- remDr$getCurrentUrl()
+tables <- content %>% html_table(fill=True)
+content <- read_html(readremDr$getCurrentUrl())
+content <- read_html(remDr$getCurrentUrl())
+content <- read_html(remDr$getCurrentUrl())
+type(currentUrl)
+currentUrl
+#tabelas_prep <- lapply(tabelas, function(x) {
+#  x$getPageSource() %>% unlist()
+#})
+#
+#tabelas_html <- lapply(tabelas_prep, read_html)
+#dfs <- lapply(tabelas_html, html_table)
+#dfs[[2]]
+currentUrl <- remDr$getCurrentUrl()
+currentUrl
+content <- read_html(currentUrl)
+# Extraindo as tabelas
+tabelas <- remDr$findElements(using = 'xpath', '//table[@class="table_resultado"]')
+View(tabelas)
+tabelas[[1]]
+tabelas_prep <- lapply(tabelas, function(x) {
+x$getPageSource() %>% unlist()
+})
+View(tabelas_prep)
+tabelas_prep[[1]]
+tabelas_html <- lapply(tabelas_prep[[1]], read_html)
+dfs <- lapply(tabelas_html, html_table)
+dfs[[2]]
+dfs
+dfs.head(2)
+dfs
+View(dfs)
+dfs[[1]][[42]]
+dfs[[1]][[1]]
+dfs[[1]][[2]]
+dfs[[1]][[2]]
+dfs[[1]][[3]]
+dfs[[1]][[4]]
+dfs[[1]][[5]]
+dfs[[1]][[9]]
+dfs[[1]][[8]]
+dfs[[1]][[7]]
+dfs[[1]][[9]]
+dfs[[1]][[9]]
+dfs[[1]][[10]]
+dfs[[1]][[10]] %>% write.csv('juristeste.csv', row.names = F)
+dfs[[1]][[9]] %>% write.csv('juristeste.csv', row.names = F)
+dfs[[1]][[10]] %>% write.csv('juristeste.csv', row.names = F)
+df_teste <- dfs[[1]][[10]]
+df_teste$X1
+df_teste$[[1]]
+df_teste$[1]
+df_teste
+df_teste$12
+df-teste2 <- slice(df_teste, 1:-1:2)
+summarize(df_teste)
+df_teste %>% pivot_wider()
+df_teste %>% pivot_wider(id_cols = 1)
+colnames(df_teste)
+df_teste %>% pivot_wider(id_cols = X1)
+df_teste$X1[2]
+length(df_teste$X1)
+key_indexes <- vector()
+value_indexes <- vector()
+for (n in length(df_teste$X1)) {
+if (n%2 == 0) {
+append(key_indexes, n)
+} append(value_indexes, n)
+}
+if (n%2 == 0) {
+append(key_indexes, n)
+} else {
+append(value_indexes, n)
+}
+for (n in length(df_teste$X1)) {
+for (n in 1:length(df_teste$X1)) {
+append(key_indexes, n)
+if (n%2 == 0) {
+append(key_indexes, n)
+} else {
+append(value_indexes, n)
+}
+for (n in 1:length(df_teste$X1)) {
+if (n%2 == 0) {
+append(key_indexes, n)
+} else {
+append(value_indexes, n)}
+}
+for (n in 1:length(df_teste$X1)) {
+print(n)
+}
+for (n in 1:length(df_teste$X1)) {
+if (n%%2 == 0) {
+append(key_indexes, n)
+} else {
+append(value_indexes, n)}
+}
+key_indexes
+value_indexes
+key_indexes <- list()
+value_indexes <- list()
+for (n in 1:length(df_teste$X1)) {
+if (n%%2 == 0) {
+append(key_indexes, n)
+} else {
+append(value_indexes, n)}
+}
+key_indexes
+value_indexes
+for (n in 1:length(df_teste$X1)) {
+if (n%%2 == 0) {
+print('par', n)
+} else {
+print('impar', n)}
+}
+for (n in 1:length(df_teste$X1)) {
+if (n%%2 == 0) {
+print(paste('par', n))
+} else {
+print(paste('impar', n)})
+}
+for (n in 1:length(df_teste$X1)) {
+if (n%%2 == 0) {
+print(paste('par', n))
+} else {
+print(paste('impar', n))}
+}
+for (n in 1:length(df_teste$X1)) {
+if (n%%2 == 0) {
+c(key_indexes, n)
+} else {
+c(value_indexes, n)}
+}
+key_indexes
+value_indexes
+for (n in 1:length(df_teste$X1)) {
+if (n%%2 == 0) {
+c(key_indexes, paste(n))
+} else {
+c(value_indexes, n)}
+}
+key_indexes
+value_indexes
+for (n in nrow(df_teste$X1)) {
+if (n%%2 == 0) {
+c(key_indexes, paste(n))
+} else {
+c(value_indexes, n)}
+}
+key_indexes
+value_indexes
+for (n in nrow(df_teste$X1)) {
+if (n%%2 == 0) {
+print(n)
+} else {
+c(value_indexes, n)}
+}
+key_indexes
+value_indexes
+for (n in nrow(df_teste$X1)) {
+if (n%%2 == 0) {
+print(paste(n))
+} else {
+c(value_indexes, n)}
+}
+key_indexes
+value_indexes
+for (n in nrow(df_teste$X1)) {
+if (n%%2 == 0) {
+print(n)
+} else {
+print('not')}
+}
+for (n in nrow(df_teste$X1)) {
+if (n%%2 == 0) {
+print(paste0(n))
+} else {
+print('not')}
+}
+for (n in nrow(df_teste$X1)) {
+if (n%%2 == 0) {
+print('yes')
+} else {
+print('not')}
+}
+for (n in 1:nrow(df_teste$X1)) {
+if (n%%2 == 0) {
+print('yes')
+} else {
+print('not')}
+}
+for (n in 1:nrow(df_teste)) {
+if (n%%2 == 0) {
+print('yes')
+} else {
+print('not')}
+}
+df_teste %>% pivot_longer(cols = X1)
+%>% pivot_wider(names_from = X1)
+df_teste %>% pivot_longer(cols = X1) %>% pivot_wider(names_from = X1)
+df_teste %>% pivot_longer(cols = X1) %>% pivot_wider(names_from = value)
+df_teste
+df_teste
+df_teste %>% pivot_longer(cols = X1) %>% pivot_wider(names_from = value)
+View(df_teste)
+df_teste %>% pivot_longer(cols = X1)
+pares <- seq_len(nrow(df_teste)) %% 2
+pares
+chaves <- df_teste[valores==0]
+chaves
+chaves <- df_teste[valores==0]
+valores <- seq_len(nrow(df_teste)) %% 2
+chaves <- df_teste[valores==0]
+chaves
+pares <- seq_len(nrow(df_teste)) %% 2
+pares
+valores <- seq_len(nrow(df_teste)) %% 2
+valores
+chaves <- df_teste[valores==0]
+chaves <- df_teste[valores==0,]
+chaves
+df <- tibble(chaves, valores)
+nrow(chaves)
+nrow(valores)
+index <- seq_len(nrow(df_teste)) %% 2
+index
+chaves <- df_teste[valores==0,]
+valores <- chaves <- df_teste[valores==1,]
+chaves
+nrow(chaves)
+nrow(valores)
+tibble(chaves, valores)
+tibble(chaves, valores, name_repair=T)
+tibble(chaves, valores, .name_repair='unique')
+tibble(chaves, valores, .name_repair='minimal')
+index <- seq_len(nrow(df_teste)) %% 2
+index
+chaves <- df_teste[index==0,]
+valores <- chaves <- df_teste[index==1,]
+chaves
+nrow(chaves)
+nrow(valores)
+tibble(chaves, valores, .name_repair='minimal')
+valores
+index <- seq_len(nrow(df_teste)) %% 2
+index
+chaves <- df_teste[index==0,]
+chaves
+valores <- chaves <- df_teste[index==1,]
+valores
+index <- seq_len(nrow(df_teste)) %% 2
+index
+valores <- df_teste[index==0,]
+valores
+chaves <- chaves <- df_teste[index==1,]
+chaves
+tibble(chaves, valores, .name_repair='minimal')
+tibble(chaves, valores, .name_repair='unique')
+colnames(df)
+index <- seq_len(nrow(df_teste)) %% 2
+index
+valores <- df_teste[index==0,]
+valores %>% rename(X1, X2)
+index <- seq_len(nrow(df_teste)) %% 2
+index
+valores <- df_teste[index==0,]
+valores %>% rename(X2, X1)
+index <- seq_len(nrow(df_teste)) %% 2
+index
+valores <- df_teste[index==0,]
+valores %>% rename('X2', 'X1')
+valores %>% rename('X1', 'X2')
+colnames(valores)
+valores <- df_teste[index==0,] %>% rename(X2 = X1)
+valores
+df <- tibble(chaves, valores)
+colnames(df)
+df
+df <- tibble(chaves, valores) %>% pivot_wider(names_from = X1, values_from = X2)
+df
+write.csv(df, 'df.csv')
+df_teste2 <- dfs[[1]][[12]]
+index <- seq_len(nrow(df_teste2)) %% 2
+valores <- df_teste2[index==0,] %>% rename(X2 = X1)
+chaves <- df_teste2[index==1,]
+df2 <- tibble(chaves, valores) %>% pivot_wider(names_from = X1, values_from = X2)
+df3 <- rbind(df1, df2)
+df3 <- rbind(df, df2)
+df3
+df %>%  rbind(df, df2)
+df
+View(df)
+df %>%  rbind(df2)
+df
+df <- rbind(df, df2)
+df
+View(df)
+index <- seq_len(nrow(df_teste[[1]])) %% 2
+index <- seq_len(length(df_teste[[1]])) %% 2
+index
+length(index)
+index2 <- seq_len(length(df_teste[[1]])) %% 2
+length(index2)
+index2 <- seq_len(length(df_teste[[1]][[2]])) %% 2
+length(index2)
+index2 <- seq_len(length(df_teste[[1]][[12]])) %% 2
+length(index2)
+index2 <- seq_len(1,length(df_teste[[1]][[12]])) %% 2
+length(index2)
+index2 <- seq_len(length(df_teste[[1]][[12]])) %% 2
+length(index2)
+index2 <- seq_len(length(df_teste[[1]])) %% 2
+length(index2)
+index2 <- seq_len(length(dfs[[1]])) %% 2
+length(index2)
+index2
+for (i in index2) {
+print(i)
+}
+for (i in index2) {
+print(dfs[[1]][[i]])
+}
+for (i in index2==0) {
+print(dfs[[1]][[i]])
+}
+for (i in dfs[[1]][[index2==0]]) {
+print(i)
+}
+# corrigir esse loop: deve iterar por todas as tabelas de index par à partir da 10ª
+# as tabelas anteriores à 10 não contém dados.
+for (i in dfs[[1]][[index2==1]]) {
+print(i)
+}
+# corrigir esse loop: deve iterar por todas as tabelas de index par à partir da 10ª
+# as tabelas anteriores à 10 não contém dados.
+dfs[[1]][[index2==1]]
+# corrigir esse loop: deve iterar por todas as tabelas de index par à partir da 10ª
+# as tabelas anteriores à 10 não contém dados.
+dfs[[1]][[2]]
+# corrigir esse loop: deve iterar por todas as tabelas de index par à partir da 10ª
+# as tabelas anteriores à 10 não contém dados.
+dfs[[1]][[2]]
+# corrigir esse loop: deve iterar por todas as tabelas de index par à partir da 10ª
+# as tabelas anteriores à 10 não contém dados.
+dfs[[1]][[10]]
+# corrigir esse loop: deve iterar por todas as tabelas de index par à partir da 10ª
+# as tabelas anteriores à 10 não contém dados.
+dfs[[1]][index2==0]
+for (i in dfs[[1]][index2==0]) {
+print(i)
+}
+for (i in dfs[[1]][index2==1]) {
+print(i)
+}
+for (i in dfs[[1]][index2==0]) {
+print(i)
+}
+dfMainTeste1
+dfMainTeste1 <- df_main[[1]]
+dfMainTeste1
+source("~/MBA USP/TCC/Código/Scraper.R", encoding = 'UTF-8', echo=TRUE)
+source("~/MBA USP/TCC/Código/Scraper.R", encoding = 'UTF-8', echo=TRUE)
+# Extraindo as tabelas
+tabelas <- remDr$findElements(using = 'xpath', '//table[@class="table_resultado"]')
+tabelas_prep <- lapply(tabelas, function(x) {
+x$getPageSource() %>% unlist()
+})
+tabelas_html <- lapply(tabelas_prep[[1]], read_html)
+dfs <- lapply(tabelas_html, html_table)
+# Tratando os dados
+df_teste <- dfs[[1]][[10]]
+index <- seq_len(nrow(df_teste)) %% 2
+valores <- df_teste[index==0,] %>% rename(X2 = X1)
+chaves <- df_teste[index==1,]
+df <- tibble(chaves, valores) %>% pivot_wider(names_from = X1, values_from = X2)
+#write.csv(df, 'df.csv')
+df_teste2 <- dfs[[1]][[12]]
+index <- seq_len(nrow(df_teste2)) %% 2
+valores <- df_teste2[index==0,] %>% rename(X2 = X1)
+chaves <- df_teste2[index==1,]
+df2 <- tibble(chaves, valores) %>% pivot_wider(names_from = X1, values_from = X2)
+df <- rbind(df, df2)
+df
+index2 <- seq_len(length(dfs[[1]])) %% 2
+length(index2)
+index2
+index3 <- seq_len(length(dfs[[1]][10:length(dfs[[1]])])) %% 2
+index3
+dfs <- dfs[[1]][10:length(dfs[[1]])]
+dfs <- dfs[index3==1]
+dfs
+#valores2 <- dfs[index3==0] %>% rename(X2 = X1)
+#chaves2 <- dfs[index3==1,]
+length(index3)
+length(dfs)
+# Modularizando através de uma função
+tratar <- function(df) {
+index <- seq_len(nrow(df)) %% 2
+valores <- df[index==0,] %>% rename(X2 = X1)
+chaves <- df[index==1,]
+df_tratada <- tibble(chaves, valores) %>% pivot_wider(names_from = X1, values_from = X2)
+return(df_tratada)
+}
+# Criando a lista de tabelas tratadas
+df_main <- lapply(dfs, tratar)
+df_main
+# criando uma única tabela em que cada tabela de df_main será uma linha
+for (i in seq_len(length(dfs))) {
+df <- tratar(dfs[[i]])
+print(df)
+#df_main <- rbind(df_main, df_tratada_parcial)
+#print(dfs[[i]][index==1])
+}
+# Existem tabelas com colunas diferentes
+## Testar deletar todas as colunas extras de todas as tabelas que tem mais de 26 colunas
+dfMainTeste1 <- df_main[[1]]
+dfMainTeste1
+dfMainTeste2 <- df_main[[2]]
+dfMainTeste2
+binded <- bind_rows(dfMainTeste1, dfMainTeste2)
+binded
+dfMainTeste1 <- df_main[[29]]
+dfMainTeste1
+dfMainTeste2 <- df_main[[30]]
+dfMainTeste2
+binded <- bind_rows(dfMainTeste1, dfMainTeste2)
+binded
+# Criando a lista de tabelas tratadas
+df_main <- lapply(dfs, tratar) %>% bind_rows(df_main)
+df_main
+write.csv(df_main,'df_main', sep=';')
+write.csv(df_main,'df_main.csv', sep=';')
+write.csv2(df_main,'df_main.csv', sep=';')
+write.table(df_main,'df_main.csv', sep=';')
+write_excel_csv(df_main,'df_main.csv', sep=';')
+write_csv(df_main,'df_main.csv', sep=';')
+# criando uma única tabela em que cada tabela de df_main será uma linha
+df_main
+write_csv(df_main,'df_main.csv')
+# Encerrando o browser e o servidor
+remDr$closeWindow()
+system('taskkill /im java.exe /f')
+View(df_main)
+View(df_main)
+debugSource("~/MBA USP/TCC/Código/Scraper.R", encoding = 'UTF-8', echo=TRUE)
+debugSource("~/MBA USP/TCC/Código/Scraper.R", encoding = 'UTF-8', echo=TRUE)
+library('RSelenium')
+library("rvest")
+library('tidyverse')
+library('netstat')
+rs_driver_object <- rsDriver(
+browser = 'firefox',
+verbose = F,
+port = free_port()
+)
+remDr <- rs_driver_object$client
+remDr$open()
+update.packages('netstat')
+install.packages('netstat')
