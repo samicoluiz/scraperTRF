@@ -1,49 +1,44 @@
 library("udpipe")
 library("lattice")
-dl <- udpipe_download_model(language = "portuguese")
+#dl <- udpipe_download_model(language = "portuguese")
 udmodel_pt <- udpipe_load_model(dl$file_model)
-
-x <- udpipe_annotate(udmodel_pt, x = df$Ementa[3])
-x <- as.tibble(x)
-str(x)
-table(x$upos)
-
-stats <- subset(x, upos %in% c("VERB"))
-stats <- txt_freq(stats$token)
-stats$key <- factor(stats$key, levels = rev(stats$key))
-barchart(stats$key ~ stats$freq)
-
-df$Ementa[3]
-
-stats <- keywords_rake(x = x, term = "lemma", group = "doc_id", 
-                       relevant = x$upos %in% c("VERB", "ADV"))
-stats$key <- factor(stats$keyword, levels = rev(stats$keyword))
-barchart(key ~ rake, data = stats, col = "cadetblue", 
-         main = "Keywords identified by RAKE", 
-         xlab = "Rake")
 
 
 # Identificando padrão sintático
-y <- udpipe(df$Decisão[6], 'portuguese')
-root_id <- as.numeric(subset(y, dep_rel == "root", select = token_id))
-root_id
-z <- subset(y, head_token_id == root_id & upos == "ADV" | dep_rel %in% c("obj", "amod") | token_id == root_id , select = token)
-z
-
+# Limpando os textos de quebras de linha mal colocadas.
+jurisprudencia_recente$Decisão <- lapply(jurisprudencia_recente$Decisão, str_replace_all("(?<![.?!])\n", ""))
 
 sucesso <- function(decisao) {
-  y <- udpipe(decisao, 'portuguese')
-  root_id <- as.numeric(subset(y, dep_rel == "root", select = token_id))
-  print(root_id)
-  z <- subset(y, head_token_id == root_id & (upos == "ADV" | dep_rel %in% c("obj", "amod")) | token_id == root_id, select = token)
-  return(z)
+  tryCatch(
+    {
+      y <- udpipe(tolower(decisao), 'portuguese')
+      root_id <- as.numeric(subset(y, dep_rel == "root", select = token_id))
+      print(root_id)
+      z <- subset(y, head_token_id == root_id & (upos == "ADV" | dep_rel %in% c("obj", "amod")) | token_id == root_id, select = token)
+      return(z[[1]])
+    },
+    error = function(cond) {NA}
+  )
+  
 }
 
-averiguar <- sucesso(df$Decisão[6])
-print(averiguar)
+# Algumas decisões tem mais de um root, isso gera um erro e instruimos o algoritmo a
+# preencher essas entradas como NA na coluna de sucessos.
 
-lapply(jurisprudencia_recente$Decisão, sucesso)
+jurisprudencia_recente$Sucessos_bruto <- lapply(jurisprudencia_recente$Decisão, sucesso) %>% 
+  lapply(paste0, collapse=" ") %>% 
+  unlist()
 
-#jurisprudencia_recente$sucesso_bruto <- jurisprudencia_recente %>% lapply(Decisão, sucesso)
-### ALGUMAS DECISÕES TEM MAIS DE UM ROOT, IDEIA -> SELECIONAR O ULTIMO ROOT A OCORRER. ###
+# Quando a coluna foi criada, os valores foram transformados em factor, e os NA viraram "NA"
+# A linha abaixo retorna o valor esperado
+jurisprudencia_recente$Sucessos_bruto[jurisprudencia_recente$Sucessos_bruto == "NA"] <- NA
 
+# Criando a coluna com os valores lógicos
+jurisprudencia_recente$Sucessos <- ifelse(grepl("não|negou", jurisprudencia_recente$Sucessos_bruto), FALSE, TRUE)
+jurisprudencia_recente$Sucessos <- ifelse(is.na(jurisprudencia_recente$Sucessos_bruto), NA, jurisprudencia_recente$Sucessos)
+
+sucessos <- summary(jurisprudencia_recente$Sucessos)['TRUE']
+fracassos <- summary(jurisprudencia_recente$Sucessos)['FALSE']
+
+print(sucessos)
+print(fracassos)
