@@ -31,10 +31,10 @@ remDr$switchToFrame(NULL)
 
 # Fazendo a pesquisa do tema
 Sys.sleep(5)
-busca <- readline(prompt='Digite o termo de busca: ')
+#busca <- readline(prompt='Digite o termo de busca: ')
 searchField <- remDr$findElement(using = 'id', 'formulario:textoLivre')
 searchField$clickElement()
-searchField$sendKeysToElement(list(busca, key="enter"))
+searchField$sendKeysToElement(list("direito moral previdenciário", key="enter"))
 Sys.sleep(5)
 
 # Localizando as tabelas no html da página
@@ -115,12 +115,12 @@ df$Classe <- as.factor(df$Classe)
 df$`Órgão julgador` <- as.factor(df$`Órgão julgador`)
 
 ## Reorganizando as colunas
-ordem_colunas <- c(1, 2, 20, 3:19)
+ordem_colunas <- c(1, 2, 19, 3:18)
 df <- df[,ordem_colunas]
 head(df)
 
 # Selecionando as colunas de interesse
-jurisprudencia <- select(df, -3, -10, -14:-20)
+jurisprudencia <- select(df, -3, -10, -14:-19)
 head(jurisprudencia)
 write.csv(jurisprudencia, 'juris_data.csv')
 
