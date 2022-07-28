@@ -127,7 +127,3 @@ write.csv(jurisprudencia, 'juris_data.csv')
 ####################################################
 ################  FIM DA LIMPEZA  ##################
 ####################################################
-
-# Anotando os dados com relação ao sucesso ou fracasso
-## Rede neural? Tentar encontrar um padrão por RegEX? Ambos?
-jurisprudencia_recente <- jurisprudencia %>% filter(Data >= '2021-01-01')

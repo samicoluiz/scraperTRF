@@ -1,5 +1,10 @@
 library("udpipe")
 library("lattice")
+library('ggplot2')
+
+# Obtendo apenas os casos únicos dos últimos 2 anos
+jurisprudencia_recente <- unique(jurisprudencia) %>% filter(Data >= '2021-01-01')
+
 #dl <- udpipe_download_model(language = "portuguese")
 udmodel_pt <- udpipe_load_model(dl$file_model)
 
@@ -42,3 +47,23 @@ fracassos <- summary(jurisprudencia_recente$Sucessos)['FALSE']
 
 print(sucessos)
 print(fracassos)
+
+# Criando o dataframe para realizar as análises
+dano_moral_previdenciario <- select(jurisprudencia_recente, Tipo, Número, Classe, "Órgão julgador", Data, Ementa, Decisão, Sucessos) %>% 
+  filter(Classe == "APELAÇÃO CIVEL (AC)") %>% 
+  group_by(dano_moral_previdenciario$'Órgão julgador') %>%
+  summarize(exitos = sum(Sucessos, na.rm=T), ocorr=n()) %>% 
+  mutate(prop_exito = exitos/sum(exitos)) %>% 
+  mutate(rate_exito = exitos/ocorr) %>%
+  arrange(desc(rate_exito)) %>% 
+  names(dano_moral_previdenciario)[1] <- 'org_julgador'
+
+grafico <- ggplot(data = dano_moral_previdenciario, aes(reorder(org_julgador, rate_exito), rate_exito)) +
+  geom_col() +
+  coord_flip() +
+  scale_x_discrete(labels = abbreviate) +
+  xlab(NULL) +
+  ylab("Taxa de êxito")
+
+
+
