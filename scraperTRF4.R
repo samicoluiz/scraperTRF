@@ -2,15 +2,6 @@ library('RSelenium')
 library("rvest")
 library('tidyverse')
 
-# Função para organizar as colunas das tabelas
-tratar <- function(df) {
-  index <- seq_len(nrow(df)) %% 2
-  valores <- df[index==0,] %>% rename(X2 = X1)
-  chaves <- df[index==1,]
-  df_tratada <- tibble(chaves, valores) %>% pivot_wider(names_from = X1, values_from = X2)
-  return(df_tratada)
-}
-
 # Criando o webdriver
 rs_driver_object <- rsDriver(
   browser = 'firefox',
@@ -20,28 +11,72 @@ rs_driver_object <- rsDriver(
 
 remDr <- rs_driver_object$client
 remDr$open()
-remDr$navigate('https://www2.cjf.jus.br/jurisprudencia/trf1/index.xhtml')
-
-# Resolvendo o CAPTCHA
-Sys.sleep(5)
-captcha <- remDr$findElement(using='xpath', '//iframe[@title="reCAPTCHA"]')
-remDr$switchToFrame(captcha)
-captcha$click()
-remDr$switchToFrame(NULL)
+remDr$navigate('https://jurisprudencia.trf4.jus.br/pesquisa/pesquisa.php?tipo=%201')
 
 # Fazendo a pesquisa do tema
 Sys.sleep(5)
 #busca <- readline(prompt='Digite o termo de busca: ')
-searchField <- remDr$findElement(using = 'id', 'formulario:textoLivre')
+optEmenta <- remDr$findElement(using = 'id', 'optEmenta')
+optEmenta$clickElement()
+decMono <- remDr$findElement(using = 'id', 'chkDecMono')
+decMono$clickElement()
+searchField <- remDr$findElement(using = 'id', 'textoPesqLivre')
 searchField$clickElement()
 searchField$sendKeysToElement(list("dano moral previdenciário", key="enter"))
 Sys.sleep(5)
+parcial <- remDr$findElement(using = 'id', 'parcial')
+parcial$clickElement()
 
 # Localizando as tabelas no html da página
-tabelas <- remDr$findElements(using = 'xpath', '//table[@class="table_resultado"]')
+#
+# Aqui usamos o método findElement e não findElements (note o s no final), este último
+# usado no scraper do TRF1, que usava uma outra estrutura de tabelas html nos resultados
+# do buscador
+tabela <- remDr$findElement(using = 'xpath', '//table[@class="tab_resultado"]')
+tabela_html <- tabela$getPageSource()
+
+# Extraindo os dados brutos
+page <- read_html(tabela_html %>% unlist())
 
 # Criando a lista agregadora
-df_main <- tibble()
+df_main <- html_table(page)
+
+# Data wrangling
+
+##### Anotações para entender a tabela bruta extraida #####
+#
+# 1.  As colunas se repetem a cada 9 linhas do tibble df_main[[2]] e.g. o Relator do caso n
+# está na linha x, o relator do caso n+1 está na linha x+9.
+#
+# 2.  O padrão de informação começa na linha 2
+#
+# 3.  A informação que nos é útil pode ser totalmente encontrada no tibble df_main[[2]]
+#
+# 3.1 As informações são: 
+#   Número do Processo,
+#   Tipo da decisão,
+#   Classe da ação, 
+#   Relator, 
+#   Origem?,
+#   Data,
+#   Ementa,
+#   Decisão
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Iniciando o loop pelas páginas de pesquisa (caso haja mais de uma)
 condicao = TRUE
