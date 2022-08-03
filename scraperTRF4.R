@@ -1,6 +1,53 @@
-library('RSelenium')
-library("rvest")
-library('tidyverse')
+##### Anotações para entender a tabela bruta extraida #####
+#
+# 1.  As colunas se repetem a cada 9 linhas do tibble df_main[[2]] e.g. o Relator do caso n
+# está na linha x, o relator do caso n+1 está na linha x+9.
+#
+# 2.  O padrão de informação começa na linha 2
+#
+# 3.  A informação que nos é útil pode ser totalmente encontrada no tibble df_main[[2]]
+#
+# 3.1 As informações são: 
+#   Número do Processo,
+#   Tipo da decisão,
+#   Classe da ação, 
+#   Relator, 
+#   Origem?,
+#   Data,
+#   Ementa,
+#   Decisão
+#
+###########################################################
+
+# Função para organizar as colunas das tabelas
+tratarTRF4 <- function(df) {
+  # Criando uma coluna cada para Relator, Ementa, e Decisão
+  relator <- df[[2]] %>% select("X1", "X2") %>% filter(str_detect(X1, '\\bRelator[a-z]?\\b')) %>% 
+    select(-X1)
+  
+  ementa <- df[[2]] %>% select("X1", "X2") %>% filter(str_detect(X1, '\\bEmenta\\b')) %>% 
+    select(-X1)
+  
+  decisao <- df[[2]] %>% select("X1", "X2") %>% filter(str_detect(X1, '\\bDecisão\\b')) %>% 
+    select(-X1)
+  
+  # Criando um tibble com as demais variáveis: Tipo, Classe, Nº do processo, Data e Órgão Julgador
+  df_clean <- df[[2]] %>% select("X2", "X4", "X8", "X12", "X14") %>% filter(str_detect(X2, '\\bAcórdão\\b')) %>%
+    add_column(relator = relator$X2, ementa = ementa$X2, decisao = decisao$X2)
+  
+  colnames(df_clean) <- c('tipo', 'classe', 'nproc', 'data', 'orgjulg', 'relator', 'ementa', 'decisao')
+  
+  
+  # Limpando o texto das variáveis (ESSA ABORDAGEM ESTÁ BAGUNÇANDO OS TIPOS DAS VARIÁVEIS)
+  # Código muito feio, buscar como reescrever isso de maneira mais elegante
+  df_clean$classe <- df_clean$classe %>% lapply(str_replace_all, 'Classe: ', '') %>% unlist()
+  df_clean$nproc <- df_clean$nproc %>% lapply(str_replace_all, 'Processo: ', '') %>% unlist()
+  df_clean$data <- df_clean$data %>% lapply(str_replace_all, 'Data da Decisão: ', '') %>% unlist()
+  df_clean$orgjulg <- df_clean$orgjulg %>% lapply(str_replace_all, 'Orgão Julgador: ', '') %>% unlist()
+  print(df_clean)
+  
+  return(df_clean)
+}  
 
 # Criando o webdriver
 rs_driver_object <- rsDriver(
@@ -29,136 +76,44 @@ parcial$clickElement()
 
 # Localizando as tabelas no html da página
 #
-# Aqui usamos o método findElement e não findElements (note o s no final), este último
+# Aqui usamos o método findElement e não findElements (note o s omitido no final), este último
 # usado no scraper do TRF1, que usava uma outra estrutura de tabelas html nos resultados
 # do buscador
 tabela <- remDr$findElement(using = 'xpath', '//table[@class="tab_resultado"]')
-tabela_html <- tabela$getPageSource()
 
-# Extraindo os dados brutos
-page <- read_html(tabela_html %>% unlist())
+# Iniciando o loop para recorrer todas as páginas da busca
+cond = TRUE
+dfTRF4 <- tibble()
 
-# Criando a lista agregadora
-df_main <- html_table(page)
-
-# Data wrangling
-
-##### Anotações para entender a tabela bruta extraida #####
-#
-# 1.  As colunas se repetem a cada 9 linhas do tibble df_main[[2]] e.g. o Relator do caso n
-# está na linha x, o relator do caso n+1 está na linha x+9.
-#
-# 2.  O padrão de informação começa na linha 2
-#
-# 3.  A informação que nos é útil pode ser totalmente encontrada no tibble df_main[[2]]
-#
-# 3.1 As informações são: 
-#   Número do Processo,
-#   Tipo da decisão,
-#   Classe da ação, 
-#   Relator, 
-#   Origem?,
-#   Data,
-#   Ementa,
-#   Decisão
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Iniciando o loop pelas páginas de pesquisa (caso haja mais de uma)
-condicao = TRUE
-
-# Enquanto o botão de 'next' estiver ativo, o loop vai recuperar as tabelas em formato html
-# transformar as tabelas em um tabela compatível com o R, separar as tabelas de interesse,
-# organizar as linhas e colunas com a função tratar(), e apensar o resultado de cada página
-# na lista agregadora
-while (condicao == TRUE) {
-  tabelas_prep <- lapply(tabelas, function(x) {x$getPageSource()})
-  tabelas_html <- lapply(tabelas_prep %>% unlist(), read_html)
-  dfs <- lapply(tabelas_html, html_table)
-  index3 <- seq_len(length(dfs[[1]][10:length(dfs[[1]])])) %% 2
-  dfs <- dfs[[1]][10:length(dfs[[1]])] 
-  dfs <- dfs[index3==1]
-  dfs <- lapply(dfs, tratar)
-  dfs <- bind_rows(dfs)
-  df_main <- bind_rows(df_main, dfs)
+while (cond == TRUE) {
+  tabela_html <- tabela$getPageSource()
+  page <- read_html(tabela_html %>% unlist())
+  tabela_limpa <- html_table(page) %>%
+    tratarTRF4()
+  dfTRF4 <- bind_rows(dfTRF4, tabela_limpa)
   
-  Sys.sleep(2) # intervalo para o carregamento de cada página
+  Sys.sleep(.5)
   
   tryCatch(
     {
-      botao_next <- remDr$findElement(using = 'xpath', '//a[@class = "ui-paginator-next ui-state-default ui-corner-all"]')
+      botao_next <- remDr$findElement(using = 'id', 'sbmProximaPagina')
       botao_next$clickElement()
     },
     error = function(e) {
+      
       print('Script finalizado!')
-      condicao <<- FALSE
+      cond <<- FALSE
     }
   )
   
-  if (condicao == FALSE) {
+  if (cond == FALSE) {
     break
   }
 }
-
-# Descomentar caso queira gerar um csv
-# write_csv(df_main,'df_main.csv')
 
 # Encerrando o browser e o servidor
 remDr$close()
 remDr$quit()
 system("taskkill /im java.exe /f")
 
-####################################################
-################  FIM DO SCRAPER  ##################
-####################################################
-
-# Formatando as colunas de data
-df <- mutate(df_main, Data = as.Date(Data, format='%d/%m/%Y'))
-df$`Data da publicação` <- gsub('\\s+', '', df$`Data da publicação`) %>% 
-  as.Date(format='%d/%m/%Y')
-head(df)
-
-# Formatando os nomes das colunas 14 e 17 (continham marcação \n e \t)
-colnames(df)[14] <- "Relator para Acórdão"
-colnames(df)[17] <- "Referência legislativa"
-summary(df)
-# Formatando a coluna de número do processo
-df$Número <- df$Número %>% strsplit(split = ' ')
-
-df$'Número Formatação' <- lapply(df$Número, function(x) x[1]) %>%
-  as.character()
-
-df$Número <- lapply(df$Número, function(x) x[2]) %>%
-  as.character()
-
-# Transformando as colunas Classe e Órgão Julgador em factor
-df$Classe <- as.factor(df$Classe)
-df$`Órgão julgador` <- as.factor(df$`Órgão julgador`)
-
-## Reorganizando as colunas
-ordem_colunas <- c(1, 2, 19, 3:18)
-df <- df[,ordem_colunas]
-head(df)
-
-# Selecionando as colunas de interesse
-jurisprudencia <- select(df, -3, -10, -14:-19)
-head(jurisprudencia)
-write.csv(jurisprudencia, 'juris_data.csv')
-
-####################################################
-################  FIM DA LIMPEZA  ##################
-####################################################
+write.csv(dfTRF4, 'juris_data_trf4.csv')
