@@ -1,5 +1,5 @@
-# scraperTRF1
-Esse código faz o scraping de jurisprudência através da ferramenta de busca no site do TRF1. Após o scraping, agrega todas as informações em formato tabular.
+# scraperTRF
+Esse código faz o scraping de jurisprudência através da ferramenta de busca no site dos TRFs. Após o scraping, agrega todas as informações em formato tabular.
 
 ## Uso
 Insere-se um termo de busca e o algoritmo retornará _todas_ as ocorrêncais do termo retornadas pela ferramenta de busca do TRF1 agregadas em formato tabular.
