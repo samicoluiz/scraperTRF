@@ -1,24 +1,21 @@
-library("udpipe")
-library("lattice")
-library('ggplot2')
+
 
 # Obtendo apenas os casos únicos dos últimos 2 anos
 jurisprudencia_recente <- unique(jurisprudencia) %>% filter(Data >= '2021-01-01')
 
-#dl <- udpipe_download_model(language = "portuguese")
+dl <- udpipe_download_model(language = "portuguese")
 udmodel_pt <- udpipe_load_model(dl$file_model)
 
 
 # Identificando padrão sintático
 # Limpando os textos de quebras de linha mal colocadas.
-jurisprudencia_recente$Decisão <- lapply(jurisprudencia_recente$Decisão, str_replace_all("(?<![.?!])\n", ""))
+jurisprudencia_recente$Decisão <- lapply(jurisprudencia_recente$Decisão, str_replace("","(?<![.?!])\n"))
 
 sucesso <- function(decisao) {
   tryCatch(
     {
       y <- udpipe(tolower(decisao), 'portuguese')
       root_id <- as.numeric(subset(y, dep_rel == "root", select = token_id))
-      print(root_id)
       z <- subset(y, head_token_id == root_id & (upos == "ADV" | dep_rel %in% c("obj", "amod")) | token_id == root_id, select = token)
       return(z[[1]])
     },
@@ -58,6 +55,7 @@ dano_moral_previdenciario <- select(jurisprudencia_recente, Tipo, Número, Class
   arrange(desc(rate_exito)) %>% 
   names(dano_moral_previdenciario)[1] <- 'org_julgador'
 
+# Melhorar os plots e gerar outras visualizações
 grafico <- ggplot(data = dano_moral_previdenciario, aes(reorder(org_julgador, rate_exito), rate_exito)) +
   geom_col() +
   coord_flip() +

@@ -1,6 +1,9 @@
 library('RSelenium')
 library("rvest")
 library('tidyverse')
+library("udpipe")
+library("lattice")
+library('ggplot2')
 
 # Função para organizar as colunas das tabelas
 tratar <- function(df) {
