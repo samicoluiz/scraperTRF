@@ -4,6 +4,10 @@ library('tidyverse')
 library("udpipe")
 library("lattice")
 library('ggplot2')
+library('quanteda')
+library('quanteda.textplots')
+library('quanteda.textstats')
+
 
 # Função para organizar as colunas das tabelas
 tratar <- function(df) {
