@@ -29,7 +29,8 @@ plot_sucessos_por_tribunal <- ggplot(data = sucessos_por_tribunal, aes(x=origem,
   geom_text(aes(label = round(razao_sucessos, 3)), vjust = 1.75, colour = "white") +
   ggtitle('Razão de Sucessos por Tribunal', subtitle='Qtd. de sucessos pelo total de casos por tribunal')
 
-plot_sucessos_por_tribunal + theme_minimal()
+figura_1 <- plot_sucessos_por_tribunal + theme_minimal()
+# ggsave('figura 1.svg', plot = figura_1, width=8, height=10)
 
 #### SEGUNDO PLOT ####
 # Grafico da quantidade de sucessos por orgao julgador por tribunal
@@ -59,9 +60,11 @@ plot_sucessos_por_orgjulg <- ggplot(data = sucessos_por_orgjulg, aes(x=razao_suc
   ylab('Órgão Julgador') +
   ggtitle('Sucessos por Órgão Julgador', subtitle = 'Qtd. de sucessos pelo total de sucessos por órgão julgador.')
   
-plot_sucessos_por_orgjulg + 
+figura_2 <- plot_sucessos_por_orgjulg + 
   theme_minimal() +
   theme(legend.position = c(.8, 0.1))
+
+# ggsave('figura 2.svg', plot = figura_2, width=8, height=10)
 
 #### TERCEIRO PLOT ####
 # nuvem de palavras para os termos mais comuns nas emendas
@@ -81,7 +84,7 @@ documento_matriz_ngrams <- dfm(tokenizer_ngrams, tolower=F)
 wordcloud_ngrams <- textplot_wordcloud(documento_matriz_ngrams, tolower = F, max_words = 20)
 
 #### QUINTO PLOT ####
-# nuvem de palavra para os termos mais comuns nas emendas por sucesso/fracasso
+# nuvem de palavra para os termos mais comuns nas ementas por sucesso/fracasso
 
 # Criando dataframes com as observações de sucesso e fracasso
 df_sucessos <- df_TRF[df_TRF$sucessos == TRUE,]
@@ -120,24 +123,30 @@ wordcloud_ngrams_fracassos <- textplot_wordcloud(documento_matriz_ngrams_fracass
 freq_palavras_sucesso <- textstat_frequency(dfm_trim(documento_matriz_ngrams_sucessos, max_termfreq = 40), n=50)
 freq_palavras_fracasso <- textstat_frequency(dfm_trim(documento_matriz_ngrams_fracassos, max_termfreq = 40), n=50)
 
-ggplot(data = freq_palavras_sucesso, aes(x=frequency, y=reorder(feature, frequency))) +
+figura_5 <- ggplot(data = freq_palavras_sucesso, aes(x=frequency, y=reorder(feature, frequency))) +
   geom_segment(aes(yend=feature), xend=0, colour='grey50') +
   geom_point(size=2) +
   xlab('N. de Ocorrências') +
+  ylab('Termo') +
   ggtitle('Tabela de Frequência de Ngramas', subtitle = 'Em casos de sucesso') +
   theme_minimal() +
   theme(
     panel.grid.major.y = element_blank()
   )
+ggsave('figura 5.svg', plot = figura_5, width=10, height=10)
 
-ggplot(data = freq_palavras_fracasso, aes(x=frequency, y=reorder(feature, frequency))) +
+
+figura_6 <- ggplot(data = freq_palavras_fracasso, aes(x=frequency, y=reorder(feature, frequency))) +
   geom_segment(aes(yend=feature), xend=0, colour='grey50') +
   geom_point(size=2) +
   xlab('N. de Ocorrências') +
+  ylab('Termo') +
   ggtitle('Tabela de Frequência de Ngramas', subtitle = 'Em casos de fracasso') +
   theme_minimal() +
   theme(
     panel.grid.major.y = element_blank()
   )
+ggsave('figura 6.svg', plot = figura_6, width=10, height=10)
+
 
 ## ver https://r-graphics.org/recipe-bar-graph-dot-plot o exemplo da figura 3.31
